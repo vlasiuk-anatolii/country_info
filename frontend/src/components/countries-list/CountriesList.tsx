@@ -28,6 +28,7 @@ const CountriesList = () => {
         >
           {countries.map((country) => (
             <CountriesListItem
+              key={country.countryCode}
               countryCode={country.countryCode}
               name={country.name}
             />
