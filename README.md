@@ -38,6 +38,7 @@ npm install
 3. Return to the root directory of the project:
 ```bash
 cd ..
+npm install
 ```
 
 ## Running the Project
