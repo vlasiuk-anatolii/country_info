@@ -1,17 +1,19 @@
 import List from "@mui/material/List";
 import CountriesListItem from "../countries-list/country-item/CountriesListItem";
-import { Alert, CircularProgress, Divider, Stack } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
 import { useGetCountries } from "../../hooks/useGetCountries";
+import Loader from "../loader/Loader";
+import ErrorComponent from "../error/ErrorComponent";
 
 const CountriesList = () => {
   const { countries, loading, error } = useGetCountries();
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (error) {
-    return <Alert severity="error">{error}</Alert>;
+    return <ErrorComponent errorMessage={error} />;
   }
 
   return (

@@ -1,35 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import { IPopulationData } from "../inerfaces/get-population.interface";
+import { useFetchData } from "./common/useFetchData";
 
-const useGetPopulation = (country: string) => {
-  const [population, setPopulation] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  
-  const fetchPopulation = useCallback(async () => {
-    const populationUrl = process.env.REACT_APP_POPULATION_API;
-    try {
-      if (!populationUrl) {
-        setError('PopulationUrl is not defined in environment variables.');
-        setLoading(false);
-        return;
-      }
-      const response = await axios.post(populationUrl, {country: `${country}`});
-      setPopulation(response.data.populationData);
-    } catch (error) {
-      const errorMessage = (error as Error).message || 'An unknown error occurred';
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [country]);
-  
 
-  useEffect(() => {
-    fetchPopulation();
-  }, [fetchPopulation]);
+const useGetPopulation = (country: string | undefined) => {
+  const populationUrl = process.env.REACT_APP_POPULATION_API;
 
-  return { population, loading, error };
+  const { data, loading, error } = useFetchData<IPopulationData>(populationUrl, 'POST', { country });
+
+  return { data, loading, error };
 };
 
 export { useGetPopulation };

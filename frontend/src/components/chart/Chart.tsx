@@ -1,35 +1,35 @@
 import {
-  Alert,
   Card,
   CardContent,
-  CircularProgress,
   Typography,
 } from "@mui/material";
 import { useGetPopulation } from "../../hooks/useGetPopulation";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
+import Loader from "../loader/Loader";
+import ErrorComponent from "../error/ErrorComponent";
 
 ChartJS.register(...registerables);
 
 interface ChartProps {
-  currentCountry: string;
+  currentCountry: string | undefined;
 }
 
 const Chart = ({ currentCountry }: ChartProps) => {
-  const { population, loading, error } = useGetPopulation(currentCountry);
+  const { data, loading, error } = useGetPopulation(currentCountry || '');
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (error) {
-    return <Alert severity="error">{error}</Alert>;
+    return <ErrorComponent errorMessage={error} />;
   }
 
-  const labels = population.map(item => item.year);
-  const dataValues = population.map(item => item.value);
+  const labels = data?.populationData.map(item => item.year);
+  const dataValues = data?.populationData.map(item => item.value);
 
-  const data = {
+  const dataForChart = {
     labels: labels,
     datasets: [
       {
@@ -56,13 +56,13 @@ const Chart = ({ currentCountry }: ChartProps) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 600, margin: "20px auto", padding: "10px" }}>
+    <Card sx={{ margin: "20px auto", padding: "10px" }}>
       <CardContent>
         <Typography variant="h5" component="div" gutterBottom>
           Population Chart:
         </Typography>
-        {population.length > 0 ? (
-          <Line data={data} options={options} />
+        {data && data.populationData && data.populationData.length > 0 ? (
+          <Line data={dataForChart} options={options} />
         ) : (
           <Typography variant="body2" color="textSecondary">
             No data to display on the chart!

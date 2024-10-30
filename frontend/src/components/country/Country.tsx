@@ -1,15 +1,14 @@
 import {
-  Alert,
   Card,
   CardContent,
-  CircularProgress,
-  List,
-  ListItem,
+  Chip,
   Typography,
 } from "@mui/material";
 import { useGetBorderCountries } from "../../hooks/useGetBorderCountries";
 import { useParams } from "react-router-dom";
 import Flag from "../flag/Flag";
+import Loader from "../loader/Loader";
+import ErrorComponent from "../error/ErrorComponent";
 
 const Country = () => {
   const params = useParams();
@@ -22,32 +21,42 @@ const Country = () => {
     useGetBorderCountries(countryCode);
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (error) {
-    return <Alert severity="error">{error}</Alert>;
+    return <ErrorComponent errorMessage={error} />;
   }
 
   return (
     <>
       <Flag />
-      <Card sx={{ maxWidth: 400, margin: "20px auto", padding: "10px" }}>
+      <Card sx={{ margin: "20px auto", padding: "10px" }}>
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom>
             Border countries:
           </Typography>
           {borderCountries.length > 0 ? (
-            <List>
+            <>
               {borderCountries.map((country) => (
-                <ListItem key={country.countryCode}>
-                  <Typography variant="body1">{country.commonName}</Typography>
-                </ListItem>
+                <Chip
+                  key={country.countryCode}
+                  label={country.commonName}
+                  color="primary"
+                  sx={{
+                    borderRadius: "8px",
+                    padding: "0 8px",
+                    backgroundColor: "#e0f7fa",
+                    color: "#00796b",
+                    fontWeight: 500,
+                    margin: "4px",
+                  }}
+                />
               ))}
-            </List>
+            </>
           ) : (
             <Typography variant="body2" color="textSecondary">
-              No data on neighboring countries
+              No data on neighboring countries!
             </Typography>
           )}
         </CardContent>

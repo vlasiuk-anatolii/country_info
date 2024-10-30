@@ -1,14 +1,15 @@
 import {
-  Alert,
+
   Box,
   Card,
   CardContent,
-  CircularProgress,
   Typography,
 } from "@mui/material";
 import { useGetFlag } from "../../hooks/useGetFlag";
 import { useParams } from "react-router-dom";
 import Chart from '../chart/Chart';
+import Loader from "../loader/Loader";
+import ErrorComponent from "../error/ErrorComponent";
 
 const Flag = () => {
   const params = useParams();
@@ -17,32 +18,32 @@ const Flag = () => {
   if (!countryCode) {
     throw new Error("Flag is missing");
   }
-  const { countryFlag, loading, error } = useGetFlag(countryCode);
+  const { data, loading, error } = useGetFlag(countryCode);
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (error) {
-    return <Alert severity="error">{error}</Alert>;
+    return <ErrorComponent errorMessage={error} />;
   }
 
   return (
     <>
-      <Card sx={{ maxWidth: 400, margin: "20px auto", padding: "10px" }}>
+      <Card sx={{ margin: "20px auto", padding: "10px" }}>
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom>
-            {countryFlag.name}
+            {data?.name}
           </Typography>
           <Box
             component="img"
-            src={countryFlag.flag}
-            alt={`${countryFlag.name} flag`}
+            src={data?.flag}
+            alt={`${data?.name} flag`}
             sx={{ width: 100, height: 60, margin: "10px auto" }}
           />
         </CardContent>
       </Card>
-      <Chart currentCountry={countryFlag.name} />
+      <Chart currentCountry={data?.name} />
     </>
   );
 };

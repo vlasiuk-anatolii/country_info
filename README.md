@@ -18,9 +18,10 @@ This project is a test task that consists of a frontend and backend for working 
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/vlasiuk-anatolii/country_info
-   cd country-info
+```bash
+git clone https://github.com/vlasiuk-anatolii/country_info
+cd country-info
+```
 
 2. Install dependencies:
 
@@ -29,6 +30,7 @@ For the frontend:
 cd frontend
 npm install
 ```
+
 For the backend:
 ```bash
 cd backend
